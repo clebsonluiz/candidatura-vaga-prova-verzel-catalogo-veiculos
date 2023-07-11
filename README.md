@@ -4,7 +4,7 @@ Projeto de candidatura de vaga junior
 ## Instalação
 
 
-O projeto apresenta um sistema de CRUD básico para um catálogo de veículos. Funcionando separadamente em duas partes, o backend (Django com Python 3.9) e o frontend (ReactJs + Vite usando o Node 18). 
+O projeto apresenta um sistema de CRUD básico para um catálogo de veículos. Funcionando separadamente em duas partes, o backend (Django com Python 3.9) e o frontend (ReactJs + Vite usando o Node 18). O 'Banco de dados' é o SQLITE para não ter perda de tempo com outras configurações externas.
 
 Desta forma, para executar o projeto é necessários os seguintes. 
 
@@ -22,7 +22,7 @@ docker-compose up
 ```
 Para iniciar os containers do backend e do frontend. 
 
-O frontend do projeto é acessado no navegador na url ```http://localhost:5555``` e o backend pelo ```http://localhost:8888```. Configurados dentro do proprio projeto para serem nessas urls. Para fazer o login na conta de ADMIN, basta logar no sistema com a conta já existente. (Criada automaticamente ao iniciar os containers) e acessar as opções presentes no header da página em react. Ou se quiser criar um usuário ADMIN novo basta acessar o terminal do container do backend e usar o comando:
+O frontend do projeto é acessado no navegador na url ```http://localhost:5555``` e o backend pelo ```http://localhost:8888```. Configurados dentro do proprio projeto para serem nessas urls. Para fazer o login na conta de privilégios administrativos, basta logar no sistema com a conta já existente {username: 'admin', password: 'administrador'}. (Criada automaticamente durante a migração do banco de dados) e acessar as opções presentes no header da página em react. Ou se quiser criar um usuário ADMIN novo basta acessar o terminal do container do backend e usar o comando:
 ```bash
 python manage.py createsuperuser
 ```
@@ -30,7 +30,28 @@ Basta digitar o username e password escolhidos para acessar a conta de admin.
 
 ## 2. Executando localmente 
 
-Caso não tenha o docker e docker-compose intalados. É possível executar o projeto com os seguintes comandos. Na raiz do projeto abra um terminal e execute:
+Caso não tenha o docker e docker-compose intalados. Primeiro é necessário editar a base de dados no arquivo settings.py no backend e defini-lo para as configurações que o Você deseja usar:
+
+Por exemplo, para usar o mysql é necessário instalar o mysqlclient (já presente no requirements.txt) e definir a configuração em settings.py assim :
+
+```python
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME': 'django_mysql_local',
+        'USER': 'root',
+        'PASSWORD': '',
+        'HOST': 'localhost',
+        'PORT': '3306',
+        'OPTIONS': {
+            'init_command': "SET sql_mode='STRICT_TRANS_TABLES'"
+        }
+    }
+}
+```
+Caso não deseja mudar o banco basta ignorar essa parte.
+
+Agora possível executar o projeto com os seguintes comandos. Na raiz do projeto abra um terminal e execute:
 
 ```bash
 cd backend
@@ -44,7 +65,7 @@ Após instaladas as dependencias do python execute as migrações do banco de da
 ```bash
 python manage.py migrate
 ```
-Em seguida caso queira criar um usuário ADMIN com o comando:
+Em seguida caso queira criar um usuário ADMIN com o comando, caso contrário basta usar a conta mencionada anteriormente para acessar o sistema:
 ```bash 
 python manage.py createsuperuser
 ```
