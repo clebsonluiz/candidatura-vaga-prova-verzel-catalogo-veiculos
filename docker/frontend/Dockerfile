@@ -1,4 +1,4 @@
-FROM node:alpine
+FROM node:lts-alpine
 
 ENV PORT 5555
 
@@ -7,7 +7,10 @@ ENV PORT 5555
 # WORKDIR /usr/src/app
 
 WORKDIR /app/frontend
-COPY /frontend/package.json /app/frontend/package.json
+
+COPY /frontend/package.json /frontend/package-lock.json /app/frontend/
+
+# COPY /frontend/vite.config.js /app/frontend/
 
 # # Installing dependencies
 RUN npm install
