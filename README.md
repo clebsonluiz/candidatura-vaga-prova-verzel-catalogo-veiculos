@@ -4,7 +4,7 @@ Projeto de candidatura de vaga junior
 ## Instalação
 
 
-O projeto apresenta um sistema de CRUD básico para um catálogo de veículos. Funcionando separadamente em duas partes, o backend (Django com Python 3.9) e o frontend (ReactJs + Vite usando o Node 18). O 'Banco de dados' é o SQLITE para não ter perda de tempo com outras configurações externas.
+O projeto apresenta um sistema de CRUD básico para um catálogo de veículos. Funcionando separadamente em duas partes, o backend (Django com Python 3.9) e o frontend (ReactJs + Vite usando o Node 18). O 'Banco de dados' é o MySQL configurado pelo Docker para não ter perda de tempo com outras configurações externas.
 
 Desta forma, para executar o projeto é necessários os seguintes. 
 
