@@ -1,5 +1,25 @@
 services:
-
+  
+  db:
+    image: mysql:8
+    container_name: react-django-mysql-db
+    environment:
+      - MYSQL_DATABASE=django_mysql_local
+      - MYSQL_USER=django_user
+      - MYSQL_PASSWORD=secret_password
+      - MYSQL_ROOT_HOST=localhost
+      - MYSQL_ROOT_PASSWORD=secret_password
+      - TZ=Sao_Paulo/Brazil
+    build: 
+      context: .
+      dockerfile: docker/db/Dockerfile
+    ports:
+      - "3306:3306"
+    volumes:
+      - /tmp/app/mysqld:/var/run/mysqld
+  
+    networks:
+      - back-end
 
   backend:
     container_name: react-django-backend
@@ -13,19 +33,35 @@ services:
       - ./backend/.env
     ports:
       - "8888:8888"
+    depends_on:
+      - db
     
+    networks:
+      - back-end
+      - front-end
+
   frontend:
     container_name: react-django-frontend
     build:
       context: .
       dockerfile: docker/frontend/Dockerfile
-    volumes:
-      - ./frontend:/app/frontend
-      # - /app/frontend/node_modules
+    # volumes:
+    #   - ./frontend:/app/frontend
+    #   - /app/frontend/node_modules
     env_file:
       - ./frontend/.env
     command: sh -c "npm rebuild esbuild && npm run dev"
     ports:
-      - "5555:5555"
+      - 5555:5555
     depends_on:
       - backend
+
+    networks:
+      - front-end
+
+volumes:
+  db:
+
+networks:
+  back-end:
+  front-end:
