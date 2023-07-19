@@ -116,10 +116,10 @@ class CarList(APIView):
         filterby = request.query_params.get('filterby', '')
         orderby = request.query_params.get('orderby', '')
         
-        query_data = Car.objects.filter(
+        query_data = Car.objects.filter((
                 Q(name__contains=filterby) |
                   Q(brand__contains=filterby) |
-                    Q(color__contains=filterby)
+                    Q(color__contains=filterby)) & Q(is_active=True)
             )
 
         cars = query_data.order_by(
