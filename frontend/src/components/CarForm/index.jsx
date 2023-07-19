@@ -112,7 +112,7 @@ const CarForm = ({ onSubmit, onClose, ...props }) => {
                         <input name="photo" type="file" className='hidden'
                             id='image_car'
                             onChange={handleAddImage} placeholder="Selecione uma imagem"
-                            accept="image/*" required />
+                            accept="image/*" required={formData.photo === 'undefined'} />
                     </label>
                 </div>
 

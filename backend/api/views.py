@@ -163,13 +163,18 @@ class CarDetail(APIView):
 
         self.check_object_permissions(request=request, obj=car)
 
-        fields = dict(request.data)
+        fields = request.data.copy()
+
+        # if photo is the same propaby the value is string, 
+        # then drop value to not raise error
+        if fields.get('photo') is not None and type(fields.get('photo')) is str:
+            fields.pop('photo')
 
         serializer = self.serializer_class(car, data=fields, partial=True)
 
         if serializer.is_valid():
             serializer.save()
-            return Response(serializer.data)
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
     def delete(self, request, pk):

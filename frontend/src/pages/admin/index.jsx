@@ -65,14 +65,14 @@ const AdminPage = ({ ...props }) => {
                         <div className='rounded-lg bg-zinc-200 w-full p-2 inline-flex items-center gap-2 '>
                             <img src={viteLogo} alt="Logo" className=' h-6' />
                             <form className='' onSubmit={
-                                e=> {
+                                e => {
                                     e.preventDefault();
                                     setFilterBy(e.target.search.value ?? '')
                                     setIsFetching(true);
                                 }
                             } action="#" method='POST'>
                                 <input className="w-full text-gray-800 px-3 py-1 border border-gray-300 rounded-md focus:outline-none focus:border-indigo-500"
-                                type="text" id="search" name="search" placeholder="Nome, Marca, cor..." />
+                                    type="text" id="search" name="search" placeholder="Nome, Marca, cor..." />
 
                             </form>
                             <button
@@ -113,7 +113,7 @@ const AdminPage = ({ ...props }) => {
                                                         'Content-Type': 'application/json',
                                                         'Authorization': `Bearer ${authContext.getStoredToken().token}`
                                                     }
-                                                }).finally(()=>setIsFetching(true))
+                                                }).finally(() => setIsFetching(true))
                                             }}
                                             onEdit={(e) => {
                                                 setFormMode(2)
@@ -146,7 +146,7 @@ const AdminPage = ({ ...props }) => {
                                     //     form.append(key, data[key])
                                     // })
 
-                                    // console.log(form);
+                                    console.log(data);
                                     fetch(`${API_URL_CARS}`, {
                                         mode: "cors",
                                         body: data,
@@ -170,7 +170,22 @@ const AdminPage = ({ ...props }) => {
                         {
                             formMode === 2 &&
                             <div className='border rounded-lg w-full'>
-                                <CarForm formData={viewCarData} onSubmit={console.log} onClose={(e) => {
+                                <CarForm formData={viewCarData} onSubmit={(data) => {
+                                    console.log(data)
+                                    fetch(`${API_URL_CARS}${viewCarData.id}`, {
+                                        mode: "cors",
+                                        body: data,
+                                        method: "PUT",
+                                        headers: {
+                                            'Authorization': `Bearer ${authContext.getStoredToken().token}`
+                                        }
+                                    }).then((res) => {
+                                        if (res.status == 201) {
+                                            setIsFetching(true);
+                                        }
+                                        return res.json();
+                                    })
+                                }} onClose={(e) => {
                                     setFormMode(0)
                                 }} />
                             </div>
